@@ -4,7 +4,7 @@ import { shuffle } from 'lodash';
 import SideMenu from './components/SideMenu';
 import { Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
-import ShowByGenre from './components/ShowByGenre';
+import Shows from './components/Shows';
 
 function App() {
   let [genres, setGenres] = useState(null);
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div className='h-screen flex'>
-      {genres ? <SideMenu links={genres} /> : null}
+      <SideMenu links={genres} />
       <main className='flex-grow overflow-y-auto'>
         <Switch>
           <Route path='/' exact component={Home}></Route>
@@ -37,7 +37,7 @@ function App() {
                   exact
                   path={`/${genre.name.toLowerCase()}`}
                   render={() => (
-                    <ShowByGenre
+                    <Shows
                       baseUrl={config.baseUrl}
                       posterSize={config.posterSizes[3]}
                       genre={genre}

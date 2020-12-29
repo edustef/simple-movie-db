@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from './ShowByGenre.module.css';
+import styles from './Shows.module.css';
 
-export default function ShowByGenre({ genre, baseUrl, posterSize }) {
+export default function Shows({ genre, baseUrl, posterSize }) {
   let [shows, setShows] = useState(null);
   let [currentPage, setCurrentPage] = useState(1);
 
@@ -33,7 +33,6 @@ export default function ShowByGenre({ genre, baseUrl, posterSize }) {
         ? shows.map((show, key) => (
             <div className={styles.card} key={key}>
               <img src={baseUrl + posterSize + '/' + show.poster_path} alt='' />
-              <div>Some info</div>
             </div>
           ))
         : null}
