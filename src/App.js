@@ -27,7 +27,7 @@ function App() {
   return (
     <div className='h-screen flex'>
       <SideMenu links={genres} />
-      <main className='flex-grow overflow-y-auto'>
+      <main className='flex-grow'>
         <Switch>
           <Route path='/' exact component={Home}></Route>
           {genres && config
