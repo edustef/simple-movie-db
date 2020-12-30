@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import styles from './Shows.module.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -57,10 +56,10 @@ export default function Shows({ genre, baseUrl, posterSize }) {
             <div
               onMouseEnter={handleShowDesc}
               onMouseLeave={handleHideDesc}
-              className='relative'
+              className='overflow-hidden relative m-4'
               key={key}
             >
-              <div className='text-white absolute w-full h-full bg-gradient-to-t from-black to-transparent'>
+              <div className='desc text-white hidden absolute w-full h-full bg-gradient-to-t from-black to-transparent'>
                 <div className='p-4 flex flex-col space-y-4 justify-end w-full h-full'>
                   <p className='font-bold uppercase'>{show.name}</p>
                   <p className='text-sm h-16 overflow-hidden'>
