@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Show from './Show';
+import { useRouteMatch, Link, Route } from 'react-router-dom';
+import properUrl from '../utils/properUrl';
+import ShowBig from './ShowBig';
 
 export default function Shows({ genre, baseUrl, posterSize }) {
   let triggerRef = useRef(null);
   let scrollerRef = useRef(null);
   let [shows, setShows] = useState(null);
   let [currentPage, setCurrentPage] = useState(1);
+  let [currentShow, setCurrentShow] = useState(null);
+  let { path, url } = useRouteMatch();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -46,37 +52,34 @@ export default function Shows({ genre, baseUrl, posterSize }) {
     fetchData();
   }, [currentPage, genre]);
 
-  function handleShowDesc(el) {}
-  function handleHideDesc(el) {}
-
   return (
-    <div ref={scrollerRef} className='flex flex-wrap h-screen overflow-y-auto'>
-      {shows
-        ? shows.map((show, key) => (
-            <div
-              onMouseEnter={handleShowDesc}
-              onMouseLeave={handleHideDesc}
-              className='overflow-hidden relative m-4'
-              key={key}
-            >
-              <div className='desc text-white hidden absolute w-full h-full bg-gradient-to-t from-black to-transparent'>
-                <div className='p-4 flex flex-col space-y-4 justify-end w-full h-full'>
-                  <p className='font-bold uppercase'>{show.name}</p>
-                  <p className='text-sm h-16 overflow-hidden'>
-                    {show.overview}
-                  </p>
-                  <p className='text-gray-400'>{show.vote_average}/10</p>
-                </div>
-              </div>
-              <img
-                className='object-cover w-full h-full'
-                src={baseUrl + posterSize + '/' + show.poster_path}
-                alt=''
-              />
-            </div>
-          ))
-        : null}
-      <div ref={triggerRef} className='hidden'></div>
-    </div>
+      <div
+        ref={scrollerRef}
+        className='flex flex-wrap h-screen overflow-y-auto'
+      >
+        <Route exact path={path}>
+          {shows
+            ? shows.map((show, key) => (
+                <Link
+                  onClick={() => setCurrentShow(show)}
+                  key={key}
+                  to={`${url}/${properUrl(show.name)}`}
+                >
+                  <Show baseUrl={baseUrl} posterSize={posterSize} show={show} />
+                </Link>
+              ))
+            : null}
+          <div ref={triggerRef} className='hidden'></div>
+        </Route>
+        {currentShow ? (
+          <Route exact path={`${path}/${properUrl(currentShow.name)}`}>
+            <ShowBig
+              baseUrl={baseUrl}
+              posterSize={posterSize}
+              show={currentShow}
+            />
+          </Route>
+        ) : null}
+      </div>
   );
 }

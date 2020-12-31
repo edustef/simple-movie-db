@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { shuffle } from 'lodash';
 import SideMenu from './components/SideMenu';
 import { Route, Switch } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/HomePage';
 import Shows from './components/Shows';
+import properUrl from './utils/properUrl';
 
 function App() {
   let [genres, setGenres] = useState(null);
@@ -28,25 +29,22 @@ function App() {
     <div className='h-screen flex'>
       <SideMenu links={genres} />
       <main className='flex-grow'>
-        <Switch>
-          <Route path='/' exact component={Home}></Route>
-          {genres && config
-            ? genres.map(genre => (
-                <Route
-                  key={genre.id}
-                  exact
-                  path={`/${genre.name.toLowerCase()}`}
-                  render={() => (
-                    <Shows
-                      baseUrl={config.baseUrl}
-                      posterSize={config.posterSizes[3]}
-                      genre={genre}
-                    />
-                  )}
-                />
-              ))
-            : null}
-        </Switch>
+        <Route path='/' exact component={Home}></Route>
+        {genres && config
+          ? genres.map(genre => (
+              <Route
+                key={genre.id}
+                path={`/${properUrl(genre.name)}`}
+                render={() => (
+                  <Shows
+                    baseUrl={config.baseUrl}
+                    posterSize={config.posterSizes[3]}
+                    genre={genre}
+                  />
+                )}
+              />
+            ))
+          : null}
       </main>
     </div>
   );
