@@ -36,7 +36,9 @@ export default function ShowBig({ show, config }) {
           <div className='text-white max-w-lg'>
             <div className='flex justify-between mb-8'>
               <div className='mr-8'>
-                <div className='text-4xl font-bold mb-1'>{show.name}</div>
+                <div className='text-4xl font-bold mb-1'>
+                  {show.name} - {show.id}
+                </div>
                 <div className='text-sm tracking-wider text-gray-300 italic'>
                   {show.first_air_date}
                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Show from './Show';
+import Show from '../components/Show';
 import { useRouteMatch, Link, Route } from 'react-router-dom';
 import properUrl from '../utils/properUrl';
 import ShowBig from './ShowBig';
@@ -57,13 +57,15 @@ export default function Shows({ config, genre }) {
       <Route exact path={path}>
         {shows
           ? shows.map((show, key) => (
-              <Link
-                onClick={() => setCurrentShow(show)}
-                key={key}
-                to={`${url}/${properUrl(show.name)}`}
-              >
-                <Show config={config} show={show} />
-              </Link>
+              <div className='flex-grow'>
+                <Link
+                  onClick={() => setCurrentShow(show)}
+                  key={key}
+                  to={`${url}/${properUrl(show.name)}`}
+                >
+                  <Show config={config} show={show} />
+                </Link>
+              </div>
             ))
           : null}
         <div ref={triggerRef} className='hidden'></div>

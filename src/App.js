@@ -4,7 +4,7 @@ import { shuffle } from 'lodash';
 import SideMenu from './components/SideMenu';
 import { Route } from 'react-router-dom';
 import Home from './pages/HomePage';
-import Shows from './components/Shows';
+import Shows from './pages/Shows';
 import properUrl from './utils/properUrl';
 
 function App() {

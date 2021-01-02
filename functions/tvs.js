@@ -3,7 +3,6 @@ const api = require('./api');
 const handler = async function (event) {
   let genreId = event.queryStringParameters.genreId;
   let page = event.queryStringParameters.page;
-  console.log(page);
   try {
     const res = await api.get('/discover/tv', {
       params: {

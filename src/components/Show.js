@@ -25,8 +25,8 @@ export default function Show({ config, show }) {
         </div>
       </animated.div>
       <img
-        className='object-cover'
-        src={config.base_url + config.poster_sizes[4] + '/' + show.poster_path}
+        className='object-cover w-full h-full'
+        src={config.base_url + config.poster_sizes[3] + '/' + show.poster_path}
         alt=''
       />
     </div>
