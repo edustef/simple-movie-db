@@ -7,7 +7,7 @@ import { useRouteMatch, Link, Route } from 'react-router-dom';
 import properUrl from '../utils/properUrl';
 import ShowBig from './ShowBig';
 
-export default function Shows({ genre, baseUrl, posterSize }) {
+export default function Shows({ config, genre }) {
   let triggerRef = useRef(null);
   let scrollerRef = useRef(null);
   let [shows, setShows] = useState(null);
@@ -53,33 +53,26 @@ export default function Shows({ genre, baseUrl, posterSize }) {
   }, [currentPage, genre]);
 
   return (
-      <div
-        ref={scrollerRef}
-        className='flex flex-wrap h-screen overflow-y-auto'
-      >
-        <Route exact path={path}>
-          {shows
-            ? shows.map((show, key) => (
-                <Link
-                  onClick={() => setCurrentShow(show)}
-                  key={key}
-                  to={`${url}/${properUrl(show.name)}`}
-                >
-                  <Show baseUrl={baseUrl} posterSize={posterSize} show={show} />
-                </Link>
-              ))
-            : null}
-          <div ref={triggerRef} className='hidden'></div>
+    <div ref={scrollerRef} className='flex flex-wrap h-screen overflow-y-auto'>
+      <Route exact path={path}>
+        {shows
+          ? shows.map((show, key) => (
+              <Link
+                onClick={() => setCurrentShow(show)}
+                key={key}
+                to={`${url}/${properUrl(show.name)}`}
+              >
+                <Show config={config} show={show} />
+              </Link>
+            ))
+          : null}
+        <div ref={triggerRef} className='hidden'></div>
+      </Route>
+      {currentShow ? (
+        <Route exact path={`${path}/${properUrl(currentShow.name)}`}>
+          <ShowBig config={config} show={currentShow} />
         </Route>
-        {currentShow ? (
-          <Route exact path={`${path}/${properUrl(currentShow.name)}`}>
-            <ShowBig
-              baseUrl={baseUrl}
-              posterSize={posterSize}
-              show={currentShow}
-            />
-          </Route>
-        ) : null}
-      </div>
+      ) : null}
+    </div>
   );
 }

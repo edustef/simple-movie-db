@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { shuffle } from 'lodash';
 import SideMenu from './components/SideMenu';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Home from './pages/HomePage';
 import Shows from './components/Shows';
 import properUrl from './utils/properUrl';
@@ -37,8 +37,7 @@ function App() {
                 path={`/${properUrl(genre.name)}`}
                 render={() => (
                   <Shows
-                    baseUrl={config.baseUrl}
-                    posterSize={config.posterSizes[3]}
+                    config={config}
                     genre={genre}
                   />
                 )}

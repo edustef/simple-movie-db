@@ -1,11 +1,20 @@
 const api = require('./api');
 
-const handler = async function () {
+const handler = async function (event) {
+  let genreId = event.queryStringParameters.genreId;
+  let page = event.queryStringParameters.page;
+  console.log(page);
   try {
-    const res = await api.get('/configuration');
+    const res = await api.get('/discover/tv', {
+      params: {
+        with_genres: genreId,
+        page: page,
+      },
+    });
+
     return {
       statusCode: 200,
-      body: JSON.stringify(res.data.images),
+      body: JSON.stringify(res.data),
     };
   } catch (error) {
     // output to netlify function log
