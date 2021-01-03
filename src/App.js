@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { shuffle } from 'lodash';
 import SideMenu from './components/SideMenu';
 import { Route } from 'react-router-dom';
 import Home from './pages/HomePage';
@@ -14,7 +13,7 @@ function App() {
   useEffect(() => {
     const fetchGenres = async () => {
       let res = await axios.get('/api/genres');
-      setGenres(shuffle(res.data.genres).slice(0, 5));
+      setGenres(res.data);
     };
     const fetchConfig = async () => {
       let res = await axios.get('/api/configuration');
@@ -35,12 +34,7 @@ function App() {
               <Route
                 key={genre.id}
                 path={`/${properUrl(genre.name)}`}
-                render={() => (
-                  <Shows
-                    config={config}
-                    genre={genre}
-                  />
-                )}
+                render={() => <Shows config={config} genre={genre} />}
               />
             ))
           : null}

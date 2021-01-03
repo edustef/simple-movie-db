@@ -2,11 +2,15 @@ const api = require('./api');
 
 const handler = async function () {
   try {
+    const ids = [10759, 35, 80, 9648, 10765];
+
     const res = await api.get('/genre/tv/list');
+
+    const data = res.data.genres.filter(genre => ids.includes(genre.id));
 
     return {
       statusCode: 200,
-      body: JSON.stringify(res.data),
+      body: JSON.stringify(data),
     };
   } catch (error) {
     // output to netlify function log

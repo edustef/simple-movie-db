@@ -1,15 +1,14 @@
 const api = require('./api');
 
 const handler = async function (event) {
-  let showId = event.queryStringParameters.genreId;
+  let showId = event.queryStringParameters.showId;
   try {
     const res = await api.get(`/tv/${showId}`);
-
     return {
       statusCode: 200,
       body: JSON.stringify(res.data),
     };
-  } catch (error) { 
+  } catch (error) {
     // output to netlify function log
     console.log(error);
     return {

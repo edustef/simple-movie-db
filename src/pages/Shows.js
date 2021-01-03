@@ -57,10 +57,9 @@ export default function Shows({ config, genre }) {
       <Route exact path={path}>
         {shows
           ? shows.map((show, key) => (
-              <div className='flex-grow'>
+              <div key={key} className='flex-grow'>
                 <Link
                   onClick={() => setCurrentShow(show)}
-                  key={key}
                   to={`${url}/${properUrl(show.name)}`}
                 >
                   <Show config={config} show={show} />
@@ -72,7 +71,7 @@ export default function Shows({ config, genre }) {
       </Route>
       {currentShow ? (
         <Route exact path={`${path}/${properUrl(currentShow.name)}`}>
-          <ShowBig config={config} show={currentShow} />
+          <ShowBig config={config} showId={currentShow.id} />
         </Route>
       ) : null}
     </div>
