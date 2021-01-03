@@ -10,7 +10,7 @@ import ShowBig from './ShowBig';
 export default function Shows({ config, genre }) {
   let triggerRef = useRef(null);
   let scrollerRef = useRef(null);
-  let [shows, setShows] = useState(null);
+  let [shows, setShows] = useState([]);
   let [currentPage, setCurrentPage] = useState(1);
   let [currentShow, setCurrentShow] = useState(null);
   let { path, url } = useRouteMatch();
@@ -55,18 +55,16 @@ export default function Shows({ config, genre }) {
   return (
     <div ref={scrollerRef} className='flex flex-wrap h-screen overflow-y-auto'>
       <Route exact path={path}>
-        {shows
-          ? shows.map((show, key) => (
-              <div key={key} className='flex-grow'>
-                <Link
-                  onClick={() => setCurrentShow(show)}
-                  to={`${url}/${properUrl(show.name)}`}
-                >
-                  <Show config={config} show={show} />
-                </Link>
-              </div>
-            ))
-          : null}
+        {shows.map((show, key) => (
+          <div key={key} className='flex-grow'>
+            <Link
+              onClick={() => setCurrentShow(show)}
+              to={`${url}/${properUrl(show.name)}`}
+            >
+              <Show config={config} show={show} />
+            </Link>
+          </div>
+        ))}
         <div ref={triggerRef} className='hidden'></div>
       </Route>
       {currentShow ? (

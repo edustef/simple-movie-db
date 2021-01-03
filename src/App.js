@@ -7,8 +7,8 @@ import Shows from './pages/Shows';
 import properUrl from './utils/properUrl';
 
 function App() {
-  let [genres, setGenres] = useState(null);
-  let [config, setConfig] = useState(null);
+  const [genres, setGenres] = useState(null);
+  const [config, setConfig] = useState(null);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -28,7 +28,7 @@ function App() {
     <div className='h-screen flex'>
       <SideMenu links={genres} />
       <main className='flex-grow'>
-        <Route path='/' exact component={Home}></Route>
+        <Route path='/' exact render={() => <Home links={genres} />}></Route>
         {genres && config
           ? genres.map(genre => (
               <Route

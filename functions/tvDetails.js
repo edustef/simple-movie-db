@@ -4,9 +4,10 @@ const handler = async function (event) {
   let showId = event.queryStringParameters.showId;
   try {
     const res = await api.get(`/tv/${showId}`);
+    const videos = await api.get(`/tv/${showId}/videos`);
     return {
       statusCode: 200,
-      body: JSON.stringify(res.data),
+      body: JSON.stringify({ ...res.data, trailers: videos.data.results }),
     };
   } catch (error) {
     // output to netlify function log

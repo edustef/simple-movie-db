@@ -3,16 +3,27 @@ import { useSpring, animated } from 'react-spring';
 
 export default function Show({ config, show }) {
   let [isDescShowing, setIsDescShowing] = useState(false);
+  let [isPosterLoaded, setIsPosterLoaded] = useState(false);
 
   const fadeDesc = useSpring({
     opacity: isDescShowing ? 1 : 0,
   });
 
+  const fadeIn = useSpring({
+    from: { opacity: 0, transform: 'translate3d(0,-20px,0)' },
+    to: { opacity: 1, transform: 'translate3d(0,0px,0)' },
+    transform: isPosterLoaded
+      ? 'translate3d(0, 0px,0)'
+      : 'translate3d(0,-20px,0)',
+  });
+
   return (
-    <div
+    <animated.div
       onMouseEnter={() => setIsDescShowing(true)}
       onMouseLeave={() => setIsDescShowing(false)}
       className='overflow-hidden relative m-4'
+      style={fadeIn}
+      onLoad={() => setIsPosterLoaded(true)}
     >
       <animated.div
         style={fadeDesc}
@@ -29,6 +40,6 @@ export default function Show({ config, show }) {
         src={config.base_url + config.poster_sizes[3] + '/' + show.poster_path}
         alt=''
       />
-    </div>
+    </animated.div>
   );
 }
