@@ -29,7 +29,7 @@ export default function ShowBig({ showId, config }) {
   });
 
   const textStyle = useSpring({
-    from: { opacity: 0, transform: 'transalte3d(0,-20px, 0)' },
+    from: { opacity: 0, transform: 'translate3d(0,-20px, 0)' },
     to: { opacity: 1, transform: 'transalte3d(0,0, 0)' },
     config: {
       mass: 2,
@@ -48,8 +48,8 @@ export default function ShowBig({ showId, config }) {
             },
           });
           setShow(res.data);
-          setIsTrailer(res.data.trailers.length > 0 ? true : false);
           console.log(res.data);
+          setIsTrailer(res.data.trailers.length > 0 ? true : false);
         } catch (e) {
           console.log(e);
         }
@@ -65,16 +65,16 @@ export default function ShowBig({ showId, config }) {
 
   let history = useHistory();
   return (
-    <div className='relative bg-gray-900 w-full h-screen'>
+    <div className='bg-gray-900 w-full h-full overflow-y-auto'>
       {show ? (
-        <div className='w-full h-full'>
-          <div className='z-10 absolute m-6'>
+        <div className='w-full relative h-full'>
+          <div className='w-full z-10 absolute p-8'>
             <button
-              className='flex mb-8 bg-gray-50 border hover:bg-gray-200 shadow-md py-3 px-5 rounded-md'
+              className='flex items-center font-semibold mb-8 bg-gray-50 border hover:bg-gray-200 shadow-md py-1 px-2 rounded-md'
               onClick={() => history.goBack()}
             >
               <svg
-                className='w-6 h- mr-3'
+                className='w-6 h-6 mr-1'
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
@@ -89,7 +89,7 @@ export default function ShowBig({ showId, config }) {
               </svg>
               Go Back
             </button>
-            <div className='flex space-x-8 relative'>
+            <div className='flex items-start flex-wrap space-x-8 relative'>
               <animated.img
                 onLoad={() => setIsPosterLoaded(true)}
                 style={posterStyle}
@@ -102,7 +102,10 @@ export default function ShowBig({ showId, config }) {
                 }
                 alt=''
               />
-              <animated.div style={textStyle} className='text-white max-w-lg'>
+              <animated.div
+                style={textStyle}
+                className='text-white max-w-lg opacity-0'
+              >
                 <div className='flex justify-between mb-8'>
                   <div className='mr-8'>
                     <div className='text-4xl font-bold mb-1'>{show.name}</div>
@@ -140,9 +143,12 @@ export default function ShowBig({ showId, config }) {
                 <p className='tracking-widest leading-relaxed'>
                   {show.overview}
                 </p>
-                <div className='flex space-x-4 mt-4'>
+                <div className='flex flex-wrap mt-2'>
                   {show.genres.map(genre => (
-                    <div className='border border-white rounded-full px-3 py-1'>
+                    <div
+                      key={genre.id}
+                      className='border border-white rounded-full ml-0 m-2 px-3 py-1'
+                    >
                       {genre.name}
                     </div>
                   ))}
@@ -176,6 +182,36 @@ export default function ShowBig({ showId, config }) {
                   </button>
                 ) : null}
               </animated.div>
+              <div className='flex flex-col items-center text-white flex-grow'>
+                <div className='flex flex-col w-3/4'>
+                  <label className='font-semibold' htmlFor='name'>
+                    Name
+                  </label>
+                  <input
+                    className='p-2'
+                    name='name'
+                    id='name'
+                    type='text'
+                    placeholder='Joe'
+                  />
+                  <label className='mt-4 font-semibold' htmlFor='comment'>
+                    Comment
+                  </label>
+                  <textarea
+                    className='p-2'
+                    name='comment'
+                    id='comment'
+                    rows='4'
+                    placeholder='Write something nice.'
+                  ></textarea>
+                  <button
+                    className='mt-4 self-start p-2 bg-green-500 font-semibold hover:bg-green-600 uppercase'
+                    type='submit'
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <animated.div style={bgStyle} className='overflow-hidden h-full'>

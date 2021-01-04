@@ -1,14 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import SideMenu from './components/SideMenu';
-import { Route } from 'react-router-dom';
+import { Route, useLocation } from 'react-router-dom';
 import Home from './pages/HomePage';
 import Shows from './pages/Shows';
+import ShowBig from './pages/ShowBig';
 import properUrl from './utils/properUrl';
 
 function App() {
   const [genres, setGenres] = useState(null);
   const [config, setConfig] = useState(null);
+  const location = useLocation();
+  const [currentShow, setCurrentShow] = useState(null);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -24,17 +27,39 @@ function App() {
     fetchConfig();
   }, []);
 
+  useEffect(() => {
+    let pathSections = location.pathname.split('/');
+    if (pathSections.length > 1) {
+      let [showName, showId] = pathSections[pathSections.length - 1].split('_');
+      console.log({ name: showName, id: showId });
+      setCurrentShow({ name: showName, id: showId });
+    }
+  }, [location]);
+
   return (
     <div className='h-screen flex'>
       <SideMenu links={genres} />
       <main className='flex-grow'>
-        <Route path='/' exact render={() => <Home links={genres} />}></Route>
+        {currentShow ? (
+          <Route
+            path={`/${currentShow.name}_${currentShow.id}`}
+            exact
+            render={() => <ShowBig showId={currentShow.id} config={config} />}
+          />
+        ) : null}
+        <Route path='/' exact render={() => <Home links={genres} />} />
         {genres && config
           ? genres.map(genre => (
               <Route
                 key={genre.id}
                 path={`/${properUrl(genre.name)}`}
-                render={() => <Shows config={config} genre={genre} />}
+                render={() => (
+                  <Shows
+                    setCurrentShow={setCurrentShow}
+                    config={config}
+                    genre={genre}
+                  />
+                )}
               />
             ))
           : null}
