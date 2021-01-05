@@ -6,6 +6,7 @@ import TrailerModal from '../components/TrailerModal';
 
 export default function ShowBig({ showId, config }) {
   const [show, setShow] = useState(null);
+  const [comments, setComments] = useState(null);
   const [isBgLoaded, setIsBgLoaded] = useState(false);
   const [isPosterLoaded, setIsPosterLoaded] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -63,6 +64,20 @@ export default function ShowBig({ showId, config }) {
     fetchData();
   }, [showId]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      let res = await axios.get(`/api/comments/${showId}`);
+      setComments(res.data);
+    }
+
+    fetchData();
+  }, [comments, showId])
+
+  const handleCommentForm = e => {
+    e.preventDefault();
+    console.log('ran');
+  };
+
   let history = useHistory();
   return (
     <div className='bg-gray-900 w-full h-full overflow-y-auto'>
@@ -89,11 +104,11 @@ export default function ShowBig({ showId, config }) {
               </svg>
               Go Back
             </button>
-            <div className='flex items-start flex-wrap space-x-8 relative'>
+            <div className='flex items-start flex-wrap relative'>
               <animated.img
                 onLoad={() => setIsPosterLoaded(true)}
                 style={posterStyle}
-                className='opacity-0 object-cover'
+                className='opacity-0 object- m-3'
                 src={
                   config.base_url +
                   config.poster_sizes[3] +
@@ -104,7 +119,7 @@ export default function ShowBig({ showId, config }) {
               />
               <animated.div
                 style={textStyle}
-                className='text-white max-w-lg opacity-0'
+                className='text-white max-w-2xl opacity-0 m-3'
               >
                 <div className='flex justify-between mb-8'>
                   <div className='mr-8'>
@@ -182,34 +197,52 @@ export default function ShowBig({ showId, config }) {
                   </button>
                 ) : null}
               </animated.div>
-              <div className='flex flex-col items-center text-white flex-grow'>
-                <div className='flex flex-col w-3/4'>
-                  <label className='font-semibold' htmlFor='name'>
+              <div className='flex-grow m-3'>
+                <form
+                  onSubmit={handleCommentForm}
+                  className='flex flex-col items-stretch w-full'
+                  method='POST'
+                >
+                  <label
+                    className='text-white mb-1 font-semibold'
+                    htmlFor='name'
+                  >
                     Name
                   </label>
                   <input
-                    className='p-2'
+                    className='p-2 opacity-50 focus:opacity-100'
                     name='name'
                     id='name'
                     type='text'
                     placeholder='Joe'
                   />
-                  <label className='mt-4 font-semibold' htmlFor='comment'>
+                  <label
+                    className='text-white mb-1 mt-4 font-semibold'
+                    htmlFor='comment'
+                  >
                     Comment
                   </label>
                   <textarea
-                    className='p-2'
+                    className='p-2 opacity-50 focus:opacity-100 resize-none overflow-y-auto'
                     name='comment'
                     id='comment'
                     rows='4'
                     placeholder='Write something nice.'
                   ></textarea>
                   <button
-                    className='mt-4 self-start p-2 bg-green-500 font-semibold hover:bg-green-600 uppercase'
+                    className='mt-4 self-start p-2 text-white bg-green-500 font-semibold hover:bg-green-600 uppercase'
                     type='submit'
                   >
                     Submit
                   </button>
+                </form>
+                <div className='text-white'>
+                  <h2 className='text-2xl mt-6 border-b'>Comments</h2>
+                  {comments ? (
+                    <div className='mt-4'>{/* TODO LOOP COMMENTS */}</div>
+                  ) : (
+                    <div className='mt-4'>Loading comments...</div>
+                  )}
                 </div>
               </div>
             </div>
