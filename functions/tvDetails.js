@@ -1,4 +1,4 @@
-const api = require('./api');
+const api = require('./_api');
 
 const handler = async function (event) {
   let showId = event.queryStringParameters.showId;

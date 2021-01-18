@@ -31,7 +31,6 @@ function App() {
     let pathSections = location.pathname.split('/');
     if (pathSections.length > 1) {
       let [showName, showId] = pathSections[pathSections.length - 1].split('_');
-      console.log({ name: showName, id: showId });
       setCurrentShow({ name: showName, id: showId });
     }
   }, [location]);

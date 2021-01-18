@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSpring, animated } from 'react-spring';
 import TrailerModal from '../components/TrailerModal';
@@ -49,7 +49,6 @@ export default function ShowBig({ showId, config }) {
             },
           });
           setShow(res.data);
-          console.log(res.data);
           setIsTrailer(res.data.trailers.length > 0 ? true : false);
         } catch (e) {
           console.log(e);
@@ -64,18 +63,34 @@ export default function ShowBig({ showId, config }) {
     fetchData();
   }, [showId]);
 
+  const fetchComments = useCallback(async () => {
+    let res = await axios.get(`/api/comments?tvId=${showId}`);
+    setComments(res.data);
+  }, [showId]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      let res = await axios.get(`/api/comments/${showId}`);
-      setComments(res.data);
-    }
+    fetchComments();
+  }, [fetchComments]);
 
-    fetchData();
-  }, [comments, showId])
-
-  const handleCommentForm = e => {
+  const handleCommentForm = async e => {
     e.preventDefault();
-    console.log('ran');
+    const fd = new FormData(e.target);
+
+    await axios.post(
+      `/api/comments/`,
+      {
+        name: fd.get('name'),
+        comment: fd.get('comment'),
+        tvId: showId,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    fetchComments();
+    e.target.reset();
   };
 
   let history = useHistory();
@@ -118,7 +133,7 @@ export default function ShowBig({ showId, config }) {
                 alt=''
               />
               <animated.div
-                style={textStyle}
+                style={textStyle} /* TODO LOOP COMMENTS */
                 className='text-white max-w-2xl opacity-0 m-3'
               >
                 <div className='flex justify-between mb-8'>
@@ -198,6 +213,7 @@ export default function ShowBig({ showId, config }) {
                 ) : null}
               </animated.div>
               <div className='flex-grow m-3'>
+                <h2 className='text-white italic text-2xl'>Leave a comment</h2>
                 <form
                   onSubmit={handleCommentForm}
                   className='flex flex-col items-stretch w-full'
@@ -239,7 +255,16 @@ export default function ShowBig({ showId, config }) {
                 <div className='text-white'>
                   <h2 className='text-2xl mt-6 border-b'>Comments</h2>
                   {comments ? (
-                    <div className='mt-4'>{/* TODO LOOP COMMENTS */}</div>
+                    <div className='h-96 mt-4 overflow-y-auto overflow-hidden'>
+                      {comments.map(comment => (
+                        <div className='my-4 p-4 bg-gray-800'>
+                          <div className='font-semibold text-lg'>
+                            {comment.name}
+                          </div>
+                          <div className='italic'>{comment.comment}</div>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div className='mt-4'>Loading comments...</div>
                   )}

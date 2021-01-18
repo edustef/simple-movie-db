@@ -1,0 +1,12 @@
+{
+  "name": "comments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "comments.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.6.3"
+  }
+}
